@@ -64,3 +64,17 @@ FROM thearticle
 		ON thearticle_has_thesection.thesection_idthesection = thesection.idthesection
         
     GROUP BY thearticle.idthearticle    ;
+
+SELECT a.idthearticle, a.thearticleTitle, LEFT(a.thearticleText,250) AS thearticleText, a.thearticleDate,
+u.theuserName, u.theuserLogin, u.idtheuser,
+GROUP_CONCAT(s.idthesection ORDER BY a.thearticledate DESC) AS idthesection, 
+GROUP_CONCAT(s.thesectionTitle ORDER BY a.thearticledate DESC SEPARATOR '|||' ) AS thesectionTitle
+FROM thearticle a
+INNER JOIN theuser u
+ON a.theuser_idtheuser = u.idtheuser 
+LEFT JOIN thearticle_has_thesection a_s
+ON a.idthearticle = a_s.thearticle_idthearticle
+LEFT JOIN thesection s
+ON a_s.thesection_idthesection = s.idthesection
+WHERE a.thearticleStatus = 1
+GROUP BY a.idthearticle;
