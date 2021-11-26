@@ -22,16 +22,15 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarResponsive">
                 <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="?idrubrique=1">section 1</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="?idrubrique=2">section 2</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="?idrubrique=3">section 3</a>
-                    </li>
-
+                    <?php
+                    foreach ($recupSection as $section) {
+                    ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="?idsection=<?= $section["idthesection"] ?>"><?= $section["thesectionTitle"] ?></a>
+                        </li>
+                    <?php
+                    }
+                    ?>
                     <li class="nav-item">
                         <a class="nav-link" href="?p=connect">Connexion</a>
                     </li>
@@ -66,16 +65,30 @@
                         foreach ($recupArticle as $article) {
                         ?>
                             <div class="alert alert-dark" role="alert">
-                                <h5><a href="?article=<?= $article["idthearticle"] ?>"><?= $article["thearticleTitle"] ?></a></h5>
+                                <h5><a href="?idarticle=<?= $article["idthearticle"] ?>"><?= $article["thearticleTitle"] ?></a></h5>
+                                <?php
+                                $sections = array_combine(explode(",", $article["idthesection"]), explode("|||", $article["thesectionTitle"]));
+                                asort($sections);
+                                if (array_key_first($sections)) {
+                                ?>
+                                    <div>
+                                        <p>
+                                            <?php
+                                            foreach ($sections as $id => $section) {
+                                                echo '<a href="?idsection=' . $id . '">' . $section . '</a>' . ($id === array_key_last($sections) ? '' : '|') . ' ';
+                                            }
+                                            ?>
+                                        </p>
+                                    </div>
+                                <?php
+                                }
+                                ?>
                                 <div>
-                                    <p><?= $article["thesectionTitle"] ?></p>
-                                </div>
-                                <div>
-                                    <p><?= cuteTheText($article["thearticleText"], 200) ?></p>
+                                    <p><?= cuteTheText($article["thearticleText"], 200) ?> <a href="<?= $article["idthearticle"] ?>">Lire la suite</a></p>
                                 </div>
 
                                 <div>
-                                    <p>Écrit par : <a href="?user=<?= $article["idtheuser"] ?>"><?= $article["theuserName"] ?></a> le <?= frenchDate($article["thearticleDate"], 3) ?></p>
+                                    <p>Écrit par : <a href="?iduser=<?= $article["idtheuser"] ?>"><?= $article["theuserName"] ?></a> le <?= frenchDate($article["thearticleDate"], 3) ?></p>
                                 </div>
                             </div>
                     <?php
