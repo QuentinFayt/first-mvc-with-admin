@@ -88,6 +88,18 @@ if (isset($_GET['idsection']) && ctype_digit($_GET['idsection']) && !empty($_GET
 
 
     // sinon on est sur l'accueil
+} elseif (isset($_GET['connect'])) {
+
+    if (isset($_POST["theuserLogin"]) && isset($_POST["theuserPwd"])) {
+        $login = htmlspecialchars(strip_tags(trim($_POST["theuserLogin"])), ENT_QUOTES);
+        $pwd = htmlspecialchars(strip_tags(trim($_POST["theuserPwd"])), ENT_QUOTES);
+
+        if ($login && $pwd) {
+        } else {
+            $error = "Login et/ou mot de passe incorrectes";
+        }
+    }
+    include_once '../view/publicView/connectView.php';
 } else {
 
     // pour le moment on est sur accueil
