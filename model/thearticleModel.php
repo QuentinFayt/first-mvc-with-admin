@@ -253,12 +253,10 @@ function thearticleAdminUpdateById(mysqli $db, array $datas): bool
 
     if ($request) {
 
-        // $sql pour la jointure entre article et section
         $sql = "DELETE FROM `thearticle_has_thesection` WHERE `thearticle_idthearticle` =  $datas[idthearticle];";
         mysqli_query($db, $sql) or die("Erreur SQL :" . mysqli_error($db));
         $sql = "INSERT INTO `thearticle_has_thesection` (`thearticle_idthearticle`,`thesection_idthesection`) values ";
 
-        // tant qu'on a des sections (au moins une)
         foreach ($datas["idthesection"] as $section) {
             $section = (int) $section;
             $sql .= "($datas[idthearticle],'$section'),";
