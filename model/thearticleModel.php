@@ -239,22 +239,35 @@ function thearticleValidationById(mysqli $db, int $idarticle, bool $validation)
     mysqli_query($db, $sql) or die("Erreur SQL :" . mysqli_error($db));
 }
 
-/*
-
-
-
-ON EST ICI
-
-
-*/
-
 function thearticleAdminUpdateById(mysqli $db, array $datas): bool
 {
 
-    $sql = "UPDATE `thearticle` SET `thearticleStatus`= " . $datas['thearticleStatus'] . " WHERE `idthearticle` = $datas[idthearticle];";
+    $sql = "UPDATE `thearticle` 
+    SET `thearticleTitle` = '$datas[thearticleTitle]',
+    `thearticleText` = '$datas[thearticleText]',
+    `thearticleStatus`=  $datas[thearticleStatus],
+    `theuser_idtheuser` = $datas[theuser_idtheuser]
+    WHERE `idthearticle` = $datas[idthearticle];";
 
-    mysqli_query($db, $sql) or die("Erreur SQL :" . mysqli_error($db));
-    return true;
+    $request = mysqli_query($db, $sql) or die("Erreur SQL :" . mysqli_error($db));
+
+    if ($request) {
+
+        // $sql pour la jointure entre article et section
+        $sql = "DELETE FROM `thearticle_has_thesection` WHERE `thearticle_idthearticle` =  $datas[idthearticle];";
+        mysqli_query($db, $sql) or die("Erreur SQL :" . mysqli_error($db));
+        $sql = "INSERT INTO `thearticle_has_thesection` (`thearticle_idthearticle`,`thesection_idthesection`) values ";
+
+        // tant qu'on a des sections (au moins une)
+        foreach ($datas["idthesection"] as $section) {
+            $section = (int) $section;
+            $sql .= "($datas[idthearticle],'$section'),";
+        }
+        $sqlok = substr($sql, 0, -1);
+        $insert_join = mysqli_query($db, $sqlok)  or die("Erreur SQL :" . mysqli_error($db));
+
+        return $insert_join;
+    }
 }
 
 /**
