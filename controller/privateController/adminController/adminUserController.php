@@ -63,10 +63,12 @@ if (isset($_GET['delete']) && ctype_digit($_GET['delete']) && !empty($_GET['dele
             // les champs sont valides
             if ($name && $login && $pwd && $right) {
                 // Insertion dans le DB (! vérification pour le login Duplicate à faire)
-                theuserInsertWithNameLoginPwdRight($dbConnect, $name, $login, $pwd, $right);
-                // redirection
-                header("Location: ./?p=user");
-                exit();
+                $result = theuserInsertWithNameLoginPwdRight($dbConnect, $name, $login, $pwd, $right);
+                if (gettype($result) === "object") {
+                    $error = $result->getMessage();
+                } else {
+                    header("Location: ./?p=user");
+                }
             } else {
                 $error = "L'insertion ne s'est pas effectuée, veuillez recommencer.";
             }

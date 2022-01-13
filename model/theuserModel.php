@@ -89,7 +89,7 @@ function theuserSelectOneByLogin(mysqli $db, string $login, string $pwd): bool
 }
 
 // fonction d'insertion d'un nouvel utilisateur dans la DB
-function theuserInsertWithNameLoginPwdRight(mysqli $db, string $name, string $login, string $pwd, int $right): bool
+function theuserInsertWithNameLoginPwdRight(mysqli $db, string $name, string $login, string $pwd, int $right)
 {
     // requête préparée pour bloquer toutes injections SQL
     $sqlPrepare = mysqli_prepare($db, "INSERT INTO `theuser`(`theuserName`, `theuserLogin`, `theuserPwd`, `theright_idtheright`) VALUES (?,?,?,?)");
@@ -98,7 +98,15 @@ function theuserInsertWithNameLoginPwdRight(mysqli $db, string $name, string $lo
     mysqli_stmt_bind_param($sqlPrepare, "sssi", $name, $login, $pwd, $right);
 
     // rexécution de la reqête
-    return mysqli_stmt_execute($sqlPrepare) or die("Erreur SQL :" . mysqli_error($db));
+    try {
+        $result = mysqli_stmt_execute($sqlPrepare);
+        if (!$result) {
+            throw new Exception("Erreur SQL :" . mysqli_error($db));
+        }
+    } catch (Exception $error) {
+        return $error;
+    }
+    return $result;
 }
 
 function theuserUpdateWithNameLoginPwdRight(mysqli $db, string $name, string $login, string $pwd, int $right, int $id): bool
