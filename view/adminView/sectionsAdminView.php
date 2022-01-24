@@ -45,12 +45,12 @@
                     // si pas d'articles (article vide)
                     if (empty($recupSections)) :
                     ?>
-                        <h3>Pas encore d'articles dans cette section</h3>
+                        <h3>Pas encore de sections</h3>
                     <?php
                     // sinon (on a au moins un article)
                     else :
                     ?>
-                        <h3>Nombre d'article : <?= count($recupSections) ?></h3>
+                        <h3>Nombre de sections: <?= count($recupSections) ?></h3>
                         <table class="table table-striped">
                             <thead>
                                 <tr>
