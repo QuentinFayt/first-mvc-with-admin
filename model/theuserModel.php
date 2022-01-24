@@ -134,6 +134,14 @@ function theuserConnect(array $user)
 }
 
 // déconnexion
+function theuserUpdateWithNameLoginPwd(mysqli $db, string $name, string $login, string $pwd, int $id): bool
+{
+    $sqlPrepare = mysqli_prepare($db, "UPDATE `theuser` SET `theuserName`=?,`theuserLogin`=?,`theuserPwd`=? WHERE `idtheuser`= ?");
+
+    mysqli_stmt_bind_param($sqlPrepare, "sssi", $name, $login, $pwd, $id);
+
+    return mysqli_stmt_execute($sqlPrepare) or die("Erreur SQL :" . mysqli_error($db));
+}
 function theuserDisconnect()
 {
     // Détruit toutes les variables de session
