@@ -34,6 +34,8 @@ if (isset($_GET["create"])) {
         if ($title && $desc) {
             thesectionUpdateById($dbConnect, $title, $desc, $idsection);
             header("Location: ./?p=section");
+        } else {
+            $error = "La modification n'a pas pu s'effectuer. Veuillez rééssayer!";
         }
     }
     $section = thesectionSelectOne($dbConnect, $idsection);
